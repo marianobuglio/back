@@ -63,7 +63,7 @@ router.post('/users/login', function(req, res, next){
       user.token = user.generateJWT();
       return res.json({user: user.toAuthJSON()});
     } else {
-      return res.status(422).json(info);
+      return res.status(422).json({message:"mail o contraseña incorrectos"});
     }
   })(req, res, next);
 });
@@ -75,8 +75,9 @@ router.post('/users/reset-pass',function(req,res,next){
 router.put('/users/reset-pass',function(req,res,next){
   console.log(req.body)
 })
-router.post('/users', function(req, res, next){
+router.post('/users/signup', function(req, res, next){
   var user = new User(req.body);
+  console.log(user)
   user.setPassword(req.body.password);
   user.save().then(function(){
     return res.json({user: user.toAuthJSON()});

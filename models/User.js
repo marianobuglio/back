@@ -5,7 +5,8 @@ var jwt = require('jsonwebtoken');
 var secret = require('../config').secret;
 
 var UserSchema = new mongoose.Schema({
-  name:{type:String,required: [true, "es requerido"]},
+  firstName:{type:String,required: [true, "es requerido"]},
+  lastName:{type:String,required: [true, "es requerido"]},
   //username: {type: String, lowercase: true, unique: true, required: [true, "es requerido"], match: [/^[a-zA-Z0-9]+$/, 'is invalid'], index: true},
   email: {type: String, lowercase: true, unique: true, required: [true, "es requerido"], match: [/\S+@\S+\.\S+/, 'is invalid'], index: true},
   image: String,
@@ -37,7 +38,7 @@ UserSchema.methods.generateJWT = function() {
 
   return jwt.sign({
     id: this._id,
-    name: this.name,
+    firstName: this.firstName,
     role:this.rol,
     exp: parseInt(exp.getTime() / 1000),
   }, secret);
@@ -45,7 +46,7 @@ UserSchema.methods.generateJWT = function() {
 
 UserSchema.methods.toAuthJSON = function(){
   return {
-    name: this.name,
+    firstName: this.firstName,
     email: this.email,
     role:this.rol,
     token: this.generateJWT(),
